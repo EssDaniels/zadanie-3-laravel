@@ -18,4 +18,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::match(['get', 'post'], '/generate-barcode', [BarcodeController::class, 'generate'])->name('generate.barcode');
+
+Route::get('/barcode', [BarcodeController::class, 'index']);
+Route::post('/barcode', [BarcodeController::class, 'generate'])->name('generate.barcode');
