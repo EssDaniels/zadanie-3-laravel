@@ -28,7 +28,7 @@
         @if(isset($text))
         <div class="mt-4">
           <h2>Wygenerowany kod kreskowy:</h2>
-          <img src="{{ asset('storage/barcode.webp') }}" alt="Kod kreskowy" class="img-fluid">
+          <img src="{{ url('storage/barcode.webp') }}" alt="Kod kreskowy">
         </div>
         @endif
       </div>

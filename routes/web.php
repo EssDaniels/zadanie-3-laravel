@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\BarcodeController;
+use App\Http\Controllers\FileController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -21,3 +22,4 @@ Route::get('/', function () {
 
 Route::get('/barcode', [BarcodeController::class, 'index']);
 Route::post('/barcode', [BarcodeController::class, 'generate'])->name('generate.barcode');
+Route::get('storage/{filename}', [FileController::class, 'serveFile']);
