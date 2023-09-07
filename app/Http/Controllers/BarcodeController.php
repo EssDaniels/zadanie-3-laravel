@@ -4,27 +4,33 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Picqer\Barcode\BarcodeGeneratorJPG;
+use Illuminate\Support\Facades\Storage;
 
 
 class BarcodeController extends Controller
 {
+    public function index()
+    {
+        return view('barcode');
+    }
+
     public function generate(Request $request)
     {
-        if ($request->isMethod('post')) {
-            $text = $request->input('text_input');
-            $generator = new BarcodeGeneratorJPG();
-            $barcodeData = $generator->getBarcode($text, $generator::TYPE_CODE_128);
+        $request->validate([
+            'text_input' => 'required|string|max:255',
+        ]);
 
-            $jpgPath = public_path('barcode.jpg');
-            file_put_contents($jpgPath, $barcodeData);
+        $text = $request->input('text_input');
+        $generator = new BarcodeGeneratorJPG();
+        $barcodeData = $generator->getBarcode($text, $generator::TYPE_CODE_128);
 
-            $image = imagecreatefromjpeg($jpgPath);
-            imagewebp($image, public_path('barcode.webp'));
-            imagedestroy($image);
+        $jpgPath = 'barcode.jpg';
+        Storage::disk('public')->put($jpgPath, $barcodeData);
 
-            return view('barcode', ['text' => $text]);
-        }
+        $image = imagecreatefromstring(Storage::disk('public')->get($jpgPath));
+        imagewebp($image, storage_path('app/public/barcode.webp'));
+        imagedestroy($image);
 
-        return view('barcode');
+        return view('barcode', ['text' => $text]);
     }
 }
